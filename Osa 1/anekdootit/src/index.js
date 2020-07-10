@@ -18,9 +18,12 @@ const randomAnecdote = (selected) => {
     randomNumber
   )
 }
-const handleVote = (selected, votes) => {
+const handleVote = (selected, votes, mostVotes, setMostVoted) => {
   let votesTemp = [...votes];
   votesTemp[selected] += 1;
+  if (votesTemp[selected] > votesTemp[mostVotes]) {
+    setMostVoted(selected)
+  }
   return (
     votesTemp
   )
@@ -30,6 +33,8 @@ const App = (props) => {
 
   // Create a new table that has size equal to anecdote amount and fill it with 0's
   const [votes, setVotes] = useState(new Array(anecdotes.length).fill(0));
+  const [mostVotes, setMostVoted] = useState(0);
+  const mostVotesTitle = 'Anecdote with most votes';
 
   return (
     <div>
@@ -40,8 +45,14 @@ const App = (props) => {
         {votes[selected]}
       </div>
       <div>
-        <Button text='vote' handleClick={() => setVotes(handleVote(selected, votes))} />
+        <Button text='vote' handleClick={() => setVotes(handleVote(selected, votes, mostVotes, setMostVoted))} />
         <Button text='next anecdote' handleClick={() => setSelected(randomAnecdote(selected))} />
+      </div>
+      <div>
+        <h4>{mostVotesTitle}</h4>
+      </div>
+      <div>
+        {props.anecdotes[mostVotes]}
       </div>
     </div>
   )
