@@ -56,12 +56,12 @@ const Statistics = (props) => {
     </div>)
 }
 const StatisticsLine = ({ text, value }) => (
-  
-    <tr>
-      <td>{text}</td>
-      <td>{value}</td>
-    </tr>
-  
+
+  <tr>
+    <td>{text}</td>
+    <td>{value}</td>
+  </tr>
+
 );
 const App = () => {
   // tallenna napit omaan tilaansa
