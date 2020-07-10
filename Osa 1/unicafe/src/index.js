@@ -38,12 +38,16 @@ const Statistics = (props) => {
         <h4>
           Statistics
         </h4>
-        <StatisticsLine text='Good' value={props.good} />
-        <StatisticsLine text='Neutral' value={props.neutral} />
-        <StatisticsLine text='Bad' value={props.bad} />
-        <StatisticsLine text='All' value={getAll(props)} />
-        <StatisticsLine text='Average' value={getAverage(props)} />
-        <StatisticsLine text='Positive' value={getPositive(props) + '%'} />
+        <table>
+          <tbody>
+            <StatisticsLine text='Good' value={props.good} />
+            <StatisticsLine text='Neutral' value={props.neutral} />
+            <StatisticsLine text='Bad' value={props.bad} />
+            <StatisticsLine text='All' value={getAll(props)} />
+            <StatisticsLine text='Average' value={getAverage(props)} />
+            <StatisticsLine text='Positive' value={getPositive(props) + '%'} />
+          </tbody>
+        </table>
       </div>;
   }
   return (
@@ -52,7 +56,12 @@ const Statistics = (props) => {
     </div>)
 }
 const StatisticsLine = ({ text, value }) => (
-  <div>{text} {value}</div>
+  
+    <tr>
+      <td>{text}</td>
+      <td>{value}</td>
+    </tr>
+  
 );
 const App = () => {
   // tallenna napit omaan tilaansa
