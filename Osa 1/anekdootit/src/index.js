@@ -19,11 +19,15 @@ const randomAnecdote = (selected) => {
   )
 }
 const handleVote = (selected, votes, mostVotes, setMostVoted) => {
+// Copy the current votes Array
   let votesTemp = [...votes];
+// add a new vote to the array
   votesTemp[selected] += 1;
+// Check if most voted anecdote needs to be updated
   if (votesTemp[selected] > votesTemp[mostVotes]) {
     setMostVoted(selected)
   }
+// return new votes array
   return (
     votesTemp
   )
