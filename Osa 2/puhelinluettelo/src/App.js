@@ -3,7 +3,7 @@ import './App.css';
 import NewPersonForm from './components/NewPersonForm.js'
 import FilterForm from './components/FilterForm'
 import Persons from './components/Persons'
-import Axios from 'axios'
+import dataService from './Services/dataService'
 
 const App = () => {
 
@@ -12,12 +12,13 @@ const App = () => {
   const [newNumber, setNewNumber] = useState('')
   const [nameFilter, setNameFilter] = useState('')
 
-  const fetchInitialData = () => {
-    Axios.get('http://localhost:3001/persons')
-    .then(response => {setPersons(response.data)})
-  }
-
-  useEffect(fetchInitialData, []);
+  useEffect(() => {
+    dataService
+      .fetchAllData()
+      .then(responseData => {
+        setPersons(responseData)
+      })
+  }, [])
 
   const addPerson = (event) => {
     event.preventDefault()
@@ -27,16 +28,18 @@ const App = () => {
       return;
     }
 
-    const nameObject = {
+    const newPersonData = {
       name: newName,
       number: newNumber,
-      id: persons.length + 1
+      //id: persons.length + 1
     }
-
-    setPersons(persons.concat(nameObject))
-    setNewName('')
-    setNewNumber('')
-
+    dataService
+      .addNewPerson(newPersonData)
+      .then(responseData => {
+        setPersons(persons.concat(responseData))
+        setNewName('')
+        setNewNumber('')
+      })
   }
 
   const handleNameFieldChange = (event) => {
@@ -51,18 +54,33 @@ const App = () => {
     setNameFilter(event.target.value)
   }
 
+  const handleRemovePerson = (person) => {
+    if (window.confirm(`Delete ${person.name}?`)) {
+      dataService
+        .deletePerson(person.id)
+        .then(() => {
+          dataService
+            .fetchAllData()
+            .then(responseData => {
+              setPersons(responseData)
+            })
+        })
+    }
+  }
+
+
   return (
     <div>
       <h2>Phonebook</h2>
-        <FilterForm nameFilter={nameFilter} handleNameFilterChange={handleNameFilterChange} />
-        <NewPersonForm 
-          addPerson={addPerson}
-          newName={newName}
-          handleNameFieldChange={handleNameFieldChange}
-          newNumber={newNumber}
-          handleNumberFieldChange={handleNumberFieldChange}
-        />
-      <Persons persons={persons} nameFilter={nameFilter} />
+      <FilterForm nameFilter={nameFilter} handleNameFilterChange={handleNameFilterChange} />
+      <NewPersonForm
+        addPerson={addPerson}
+        newName={newName}
+        handleNameFieldChange={handleNameFieldChange}
+        newNumber={newNumber}
+        handleNumberFieldChange={handleNumberFieldChange}
+      />
+      <Persons persons={persons} nameFilter={nameFilter} handleRemovePerson={handleRemovePerson} />
 
     </div>
   )
