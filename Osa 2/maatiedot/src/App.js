@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react'
 import FilterForm from './components/FilterForm'
 import Countries from './components/Countries'
-import Axios from 'axios'
+import axios from 'axios'
 
 function App() {
 
@@ -9,7 +9,7 @@ function App() {
   const [nameFilter, setNameFilter] = useState('');
 
   const fetchInitialData = () => {
-    Axios.get('https://restcountries.eu/rest/v2/all')
+    axios.get('https://restcountries.eu/rest/v2/all')
     .then(response => {setCountries(response.data)})
   }
 
