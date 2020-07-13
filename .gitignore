@@ -4,6 +4,7 @@
 node_modules/
 /.pnp
 .pnp.js
+Osa 2/maatiedot/src/components/Secrets.js
 
 # testing
 /coverage

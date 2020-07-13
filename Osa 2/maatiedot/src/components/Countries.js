@@ -1,14 +1,28 @@
-import React from 'react';
-
+import React, {useState, useEffect} from 'react';
+import Country from './Country'
 
 const Countries = ({
     countries,
     nameFilter,
 }) => {
 
+    const [selectedCountry, setSelectedCountry] = useState(null)
+    useEffect(() => {setSelectedCountry(null);}, [nameFilter])
+
     let searchResultCount = countries.filter(country => country.name.toLowerCase().includes(nameFilter.toLowerCase()));
 
-    if (searchResultCount.length > 10) {
+
+    const selectCountry = (country) => {
+        setSelectedCountry(country);
+    }
+    if (selectedCountry) {
+        return (
+            <div>
+                <Country country={selectedCountry} />
+            </div>
+        )
+    }
+    else if (searchResultCount.length > 10) {
 
         return (
             <div>
@@ -16,11 +30,14 @@ const Countries = ({
             </div>
         )
 
-    } else if (searchResultCount.length > 1) {
+    } else if (searchResultCount.length > 1 || searchResultCount.length === 0) {
         return (
             <div>
                 {searchResultCount.map((country) => (
-                    <p key={country.numericCode}>{country.name}</p>
+                    <div key={country.numericCode}>
+                    <p>{country.name}</p>
+                    <button onClick={() => selectCountry(country)}>show</button>
+                    </div>
                 ))}
             </div>
         )
@@ -28,22 +45,7 @@ const Countries = ({
 
         return (
             <div>
-                {searchResultCount.map((country) => (
-                    <div key={country.numericCode}>
-                        <h3>{country.name}</h3>
-                        <p>capital {country.capital}</p>
-                        <p>population {country.population}</p>
-                        <h4>languages</h4>
-                        <ul>
-                            {country.languages.map((lang, i) => (
-                                <li key={i}>{lang.name}</li>
-                            ))}
-                        </ul>
-                        <div>
-                            <img src={country.flag} alt={`The flag of ${country.name}`}/>
-                        </div>
-                    </div>
-                ))}
+                <Country country={searchResultCount[0]} />
             </div>
         )
     }
