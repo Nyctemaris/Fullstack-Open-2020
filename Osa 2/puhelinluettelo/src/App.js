@@ -33,6 +33,10 @@ const App = () => {
         if (window.confirm(`${duplicatePerson.name} is already added to phonebook, replace the old number with a new one?`)) {
           handleNumberUpdate(newPersonData, duplicatePerson)
           return;
+        } else {
+          setNewName('')
+          setNewNumber('')
+          return;
         }
       }
     
@@ -80,7 +84,8 @@ const App = () => {
               .fetchAllData()
                 .then(responseData => {
                   setPersons(responseData)
-                    return true;
+                  setNewName('')
+                  setNewNumber('')
             })
         })
 
