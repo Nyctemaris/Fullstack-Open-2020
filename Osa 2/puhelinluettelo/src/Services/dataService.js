@@ -13,8 +13,8 @@ const addNewPerson = async (newPersonData) => {
     return response.data
 }
 
-const updateData = async (updatedPersonData, id) => {
-    const request = axios.post(`${baseURL}/${id}`, updatedPersonData)
+const updateNumber = async (id, newPersonData) => {
+    const request = axios.put(`${baseURL}/${id}`, newPersonData)
     const response = await request
     return response.data
 }
@@ -23,4 +23,4 @@ const deletePerson = async (personId) => {
     const response = await request
     return response.data
 }
-export default {fetchAllData, addNewPerson, updateData, deletePerson}
+export default {fetchAllData, addNewPerson, updateNumber, deletePerson}

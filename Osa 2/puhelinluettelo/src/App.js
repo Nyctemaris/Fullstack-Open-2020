@@ -23,16 +23,20 @@ const App = () => {
   const addPerson = (event) => {
     event.preventDefault()
 
-    if (persons.find(person => person.name === newName)) {
-      alert(`${newName} is already added to phonebook`)
-      return;
-    }
-
     const newPersonData = {
       name: newName,
       number: newNumber,
-      //id: persons.length + 1
     }
+
+    const duplicatePerson = (persons.find(person => person.name === newName));
+      if (duplicatePerson) {
+        if (window.confirm(`${duplicatePerson.name} is already added to phonebook, replace the old number with a new one?`)) {
+          handleNumberUpdate(newPersonData, duplicatePerson)
+          return;
+        }
+      }
+    
+
     dataService
       .addNewPerson(newPersonData)
       .then(responseData => {
@@ -68,6 +72,19 @@ const App = () => {
     }
   }
 
+  const handleNumberUpdate = (newPersonData, duplicatePerson) => {
+      dataService
+        .updateNumber(duplicatePerson.id, newPersonData)
+          .then(() => {
+            dataService
+              .fetchAllData()
+                .then(responseData => {
+                  setPersons(responseData)
+                    return true;
+            })
+        })
+
+  }
 
   return (
     <div>
