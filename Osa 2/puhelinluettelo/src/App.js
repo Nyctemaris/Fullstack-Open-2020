@@ -4,6 +4,7 @@ import NewPersonForm from './components/NewPersonForm.js'
 import FilterForm from './components/FilterForm'
 import Persons from './components/Persons'
 import dataService from './Services/dataService'
+import Notification from './components/Notification'
 
 const App = () => {
 
@@ -11,6 +12,8 @@ const App = () => {
   const [newName, setNewName] = useState('')
   const [newNumber, setNewNumber] = useState('')
   const [nameFilter, setNameFilter] = useState('')
+  const [successNotification, setSuccessNotification] = useState(null)
+  const [failureNotification, setFailureNotification] = useState(null)
 
   useEffect(() => {
     dataService
@@ -29,17 +32,19 @@ const App = () => {
     }
 
     const duplicatePerson = (persons.find(person => person.name === newName));
-      if (duplicatePerson) {
-        if (window.confirm(`${duplicatePerson.name} is already added to phonebook, replace the old number with a new one?`)) {
-          handleNumberUpdate(newPersonData, duplicatePerson)
-          return;
-        } else {
-          setNewName('')
-          setNewNumber('')
-          return;
-        }
+    if (duplicatePerson) {
+      if (window.confirm(`${duplicatePerson.name} is already added to phonebook, replace the old number with a new one?`)) {
+
+        handleNumberUpdate(newPersonData, duplicatePerson)
+        return;
+
+      } else {
+        setNewName('')
+        setNewNumber('')
+        return;
       }
-    
+    }
+
 
     dataService
       .addNewPerson(newPersonData)
@@ -77,23 +82,34 @@ const App = () => {
   }
 
   const handleNumberUpdate = (newPersonData, duplicatePerson) => {
-      dataService
-        .updateNumber(duplicatePerson.id, newPersonData)
-          .then(() => {
-            dataService
-              .fetchAllData()
-                .then(responseData => {
-                  setPersons(responseData)
-                  setNewName('')
-                  setNewNumber('')
-            })
-        })
+    dataService
+      .updateNumber(duplicatePerson.id, newPersonData)
+        .catch(error => {
+          setFailureNotification(`updating ${newPersonData.name} phonenumber has failed, please try again`)
+            setTimeout(() => {
+              setFailureNotification(null)
+        }, 5000)})
+      .then(() => {
+        dataService
+          .fetchAllData()
+          .then(responseData => {
+            setPersons(responseData)
+            setNewName('')
+            setNewNumber('')
+            setSuccessNotification(`User ${newPersonData.name} phonenumber has been updated`)
+            setTimeout(() => {
+              setSuccessNotification(null)
+            }, 5000)
+
+          })
+      })
 
   }
 
   return (
     <div>
       <h2>Phonebook</h2>
+      <Notification notificationMessage={successNotification}/>
       <FilterForm nameFilter={nameFilter} handleNameFilterChange={handleNameFilterChange} />
       <NewPersonForm
         addPerson={addPerson}
