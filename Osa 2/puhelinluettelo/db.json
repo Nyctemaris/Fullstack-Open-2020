@@ -1,19 +1,3 @@
 {
-  "persons": [
-    {
-      "name": "aarne",
-      "number": "12669945",
-      "id": 1
-    },
-    {
-      "name": "jari",
-      "number": "8881",
-      "id": 3
-    },
-    {
-      "name": "Valto Moisio",
-      "number": "444",
-      "id": 4
-    }
-  ]
+  "persons": []
 }

@@ -12,8 +12,8 @@ const App = () => {
   const [newName, setNewName] = useState('')
   const [newNumber, setNewNumber] = useState('')
   const [nameFilter, setNameFilter] = useState('')
-  const [successNotification, setSuccessNotification] = useState(null)
-  const [failureNotification, setFailureNotification] = useState(null)
+  const [notification, setNotification] = useState(null)
+  const [notificationType, setNotificationType] = useState(null)
 
   useEffect(() => {
     dataService
@@ -52,6 +52,12 @@ const App = () => {
         setPersons(persons.concat(responseData))
         setNewName('')
         setNewNumber('')
+        setNotificationType('successNotification')
+        setNotification(`User ${newPersonData.name} has been added to the phonebook`)
+        setTimeout(() => {
+          setNotification(null)
+          setNotificationType(null)
+        }, 5000)
       })
   }
 
@@ -84,11 +90,6 @@ const App = () => {
   const handleNumberUpdate = (newPersonData, duplicatePerson) => {
     dataService
       .updateNumber(duplicatePerson.id, newPersonData)
-        .catch(error => {
-          setFailureNotification(`updating ${newPersonData.name} phonenumber has failed, please try again`)
-            setTimeout(() => {
-              setFailureNotification(null)
-        }, 5000)})
       .then(() => {
         dataService
           .fetchAllData()
@@ -96,12 +97,26 @@ const App = () => {
             setPersons(responseData)
             setNewName('')
             setNewNumber('')
-            setSuccessNotification(`User ${newPersonData.name} phonenumber has been updated`)
+            setNotificationType('successNotification')
+            setNotification(`User ${newPersonData.name} phonenumber has been updated`)
             setTimeout(() => {
-              setSuccessNotification(null)
+              setNotification(null)
+              setNotificationType(null)
             }, 5000)
 
           })
+      }).catch(e => {
+        setNotificationType('failureNotification')
+        setNotification(`updating user ${newPersonData.name} phonenumber has failed, please try again`)
+        setTimeout(() => {
+          setNotificationType(null)
+          setNotification(null)
+          dataService
+            .fetchAllData()
+            .then(responseData => {
+              setPersons(responseData)
+            })
+        }, 5000)
       })
 
   }
@@ -109,7 +124,7 @@ const App = () => {
   return (
     <div>
       <h2>Phonebook</h2>
-      <Notification notificationMessage={successNotification}/>
+      <Notification notificationmessage={notification} notificationType={notificationType} />
       <FilterForm nameFilter={nameFilter} handleNameFilterChange={handleNameFilterChange} />
       <NewPersonForm
         addPerson={addPerson}

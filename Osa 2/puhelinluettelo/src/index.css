@@ -13,7 +13,7 @@ code {
 }
 
 .successNotification {
-  color: red;
+  color: green;
   background: lightgrey;
   font-size: 20px;
   border-style: solid;
@@ -23,7 +23,7 @@ code {
 }
 
 .failureNotification {
-  color: green;
+  color: red;
   background: lightgrey;
   font-size: 20px;
   border-style: solid;
