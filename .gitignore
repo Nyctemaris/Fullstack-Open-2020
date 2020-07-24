@@ -11,6 +11,7 @@ Osa 2/maatiedot/src/components/Secrets.js
 
 # production
 /build
+Osa 2/puhelinluettelo/build/
 
 # misc
 .DS_Store

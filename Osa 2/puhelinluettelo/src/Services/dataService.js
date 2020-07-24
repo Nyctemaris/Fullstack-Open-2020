@@ -1,5 +1,5 @@
 import axios from 'axios'
-const baseURL = 'http://localhost:3001/api/persons'
+const baseURL = 'https://full-stack-open-2020.herokuapp.com/api/persons'
 
 const fetchAllData = async () => {
     const request = axios.get(baseURL)
